@@ -1,0 +1,46 @@
+language: c
+
+cache:
+  directories:
+  - $HOME/.stack
+
+services: [postgresql]
+
+# The different configurations we want to test.
+#
+# We set the compiler values here to tell Travis to use a different
+# cache file per set of arguments.
+matrix:
+  include:
+  - env: ARGS=""
+    compiler: ": #stack 8.0.2"
+    addons: { apt: { packages: [ghc-8.0.2], sources: [hvr-ghc] } }
+
+  - env: ARGS="--resolver nightly"
+    compiler: ": #stack nightly"
+    addons: { apt: { packages: [libgmp-dev] } }
+
+  allow_failures:
+  # Nightly builds are allowed to fail
+  - env: ARGS="--resolver nightly"
+
+before_install:
+# Using compiler above sets CC to an invalid value, so unset it
+- unset CC
+
+# Download and unpack the stack executable
+- export PATH=$HOME/.local/bin:$PATH
+- mkdir -p ~/.local/bin
+- travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+
+install:
+- (cd genesis && stack --no-terminal --install-ghc $ARGS test --bench --only-dependencies)
+- (cd genesis-test && stack --no-terminal --install-ghc $ARGS test --bench --only-dependencies)
+
+before_script:
+- psql -c 'CREATE DATABASE genesis;' -U postgres
+- psql -c 'CREATE DATABASE genesis_test;' -U postgres
+
+script:
+- (cd genesis && PG_DB_NAME=genesis stack --no-terminal $ARGS test --bench --no-run-benchmarks --haddock --no-haddock-deps --ghc-options=-Werror)
+- (cd genesis-test && PG_DB_NAME=genesis_test stack --no-terminal $ARGS test --bench --no-run-benchmarks --haddock --no-haddock-deps --ghc-options=-Werror)

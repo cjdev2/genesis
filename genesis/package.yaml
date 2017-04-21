@@ -1,0 +1,67 @@
+name: genesis
+version: 0.0.1.0
+category: Other
+synopsis: Opinionated bootstrapping for Haskell web services.
+description: Opinionated bootstrapping for Haskell web services.
+maintainer: Alexis King <lexi.lambda@gmail.com>
+
+extra-source-files:
+- package.yaml
+- stack.yaml
+
+ghc-options: -Wall
+default-extensions:
+- ConstraintKinds
+- DeriveGeneric
+- DuplicateRecordFields
+- FlexibleContexts
+- FlexibleInstances
+- GADTs
+- GeneralizedNewtypeDeriving
+- KindSignatures
+- LambdaCase
+- MultiParamTypeClasses
+- NamedFieldPuns
+- OverloadedStrings
+- RankNTypes
+- ScopedTypeVariables
+- TypeApplications
+- TypeOperators
+
+library:
+  dependencies:
+  - base
+  - directory
+  - envparse
+  - file-embed
+  - filepath
+  - monad-control
+  - monad-logger
+  - monad-persist
+  - persistent
+  - persistent-postgresql
+  - persistent-template
+  - resource-pool
+  - template-haskell
+  - text
+  - text-conversions
+  source-dirs: library
+
+tests:
+  genesis-test-suite:
+    dependencies:
+    - base
+    - genesis
+    - hspec
+    - monad-control
+    - monad-logger
+    - monad-persist
+    - persistent-sqlite
+    - persistent-template
+    - text
+    ghc-options:
+    - -rtsopts
+    - -threaded
+    - -with-rtsopts=-N
+    main: Main.hs
+    source-dirs: test-suite
