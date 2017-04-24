@@ -9,6 +9,7 @@ license: ISC
 github: cjdev/genesis
 
 extra-source-files:
+- CHANGELOG.md
 - package.yaml
 - stack.yaml
 
@@ -16,6 +17,7 @@ ghc-options: -Wall
 default-extensions:
 - ConstraintKinds
 - DeriveGeneric
+- DuplicateRecordFields
 - FlexibleContexts
 - FlexibleInstances
 - GADTs
@@ -32,14 +34,15 @@ default-extensions:
 
 library:
   dependencies:
-  - base
-  - genesis == 0.0.1.0
+  - base                   >= 4.9.0.0 && < 5
+  - genesis                == 0.0.1.0
   - hspec
+  - hspec-expectations     >= 0.7.0
   - lifted-base
-  - monad-control
-  - monad-logger
-  - monad-persist
-  - persistent-postgresql
+  - monad-control          >= 1.0.0.0 && < 2
+  - monad-logger           >= 0.3.10
+  - monad-persist          >= 0.0.1.0 && < 1
+  - persistent-postgresql  >= 2.5 && < 3
   - transformers-base
   source-dirs: library
 

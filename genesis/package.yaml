@@ -9,6 +9,7 @@ license: ISC
 github: cjdev/genesis
 
 extra-source-files:
+- CHANGELOG.md
 - package.yaml
 - stack.yaml
 
@@ -33,21 +34,21 @@ default-extensions:
 
 library:
   dependencies:
-  - base
-  - directory
-  - envparse
-  - file-embed
+  - base                   >= 4.9.0.0 && < 5
+  - directory              >= 1.2.7.0
+  - envparse               >= 0.3.0 && < 1
+  - file-embed             >= 0.0.10 && < 1
   - filepath
-  - monad-control
-  - monad-logger
-  - monad-persist
-  - persistent
-  - persistent-postgresql
-  - persistent-template
+  - monad-control          >= 1.0.0.0 && < 2
+  - monad-logger           >= 0.3.10
+  - monad-persist          >= 0.0.1.0 && < 1
+  - persistent             >= 2.5 && < 3
+  - persistent-postgresql  >= 2.5 && < 3
+  - persistent-template    >= 2.5 && < 3
   - resource-pool
-  - template-haskell
+  - template-haskell       >= 2.11.0.0 && < 2.12
   - text
-  - text-conversions
+  - text-conversions       >= 0.2.0 && < 1
   source-dirs: library
 
 tests:
