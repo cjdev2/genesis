@@ -4,6 +4,9 @@ category: Other
 synopsis: Opinionated bootstrapping for Haskell web services.
 description: Opinionated bootstrapping for Haskell web services.
 maintainer: Alexis King <lexi.lambda@gmail.com>
+copyright: 2017 CJ Affiliate by Conversant
+license: ISC
+github: cjdev/genesis
 
 extra-source-files:
 - package.yaml
