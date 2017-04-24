@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -fno-warn-unused-top-binds #-}
+{-# OPTIONS_HADDOCK not-home #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TupleSections #-}
@@ -37,10 +38,11 @@ SchemaMigration
   deriving Eq Show
 |]
 
-{-| Compiles a set of .sql files in a particular directory into your
-  application, then runs them against a database at runtime. This function is
-  implemented with Template Haskell so that it can read the migration files at
-  compile-time, but it semantically has the type
+{-|
+  Compiles a set of .sql files in a particular directory into your application,
+  then runs them against a database at runtime. This function is implemented
+  with Template Haskell so that it can read the migration files at compile-time,
+  but it semantically has the type
   @('MonadLogger' m, 'MonadSqlPersist' m) => 'FilePath' -> m ()@. Migrations
   will be executed in order based on their filename, according to 'sort'.
 

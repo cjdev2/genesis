@@ -5,8 +5,7 @@ import qualified Spec
 
 import Control.Monad.Logger (runNoLoggingT)
 import Genesis.Persist.Migrate (runMigrations)
-import Genesis.Test.Hspec (hspec)
-import Genesis.Test.Persist
+import Genesis.Test
 
 main :: IO ()
 main = do

@@ -1,3 +1,5 @@
+{-# OPTIONS_HADDOCK not-home #-}
+
 {-|
   This module provides 'withGlobalPostgresqlConn', a function that parameterizes
   a global reference to a PostgreSQL database, 'dbConn'. This is intended for
@@ -30,15 +32,11 @@
   @
 -}
 module Genesis.Test.Persist
-  ( -- * Managing the global database connection
-    runDB
+  ( runDB
   , runDBCommit
   , dbExample
   , dbConn
   , withGlobalPostgresqlConn
-  -- * Postgres options envparse parser
-  , PostgresOptions(..)
-  , postgresOptions
   ) where
 
 import qualified Control.Monad.Persist as Persist
@@ -52,7 +50,7 @@ import Control.Monad.Logger (runNoLoggingT)
 import Control.Monad.Trans.Control (MonadBaseControl, liftBaseOp_)
 import Data.IORef (IORef, newIORef, readIORef, writeIORef)
 import Data.Maybe (fromMaybe)
-import Genesis.Persist (PostgresOptions(..), postgresOptions, withPostgresqlConn)
+import Genesis.Persist (PostgresOptions, withPostgresqlConn)
 import GHC.Stack (HasCallStack)
 import System.IO.Unsafe (unsafePerformIO)
 

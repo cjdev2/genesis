@@ -12,16 +12,16 @@ module Genesis.MigrateSpec (spec) where
 
 import qualified Test.Hspec as Hspec
 
-import Genesis.Persist.Migrate
-import Test.Hspec hiding (shouldBe)
-
 import Control.Monad.Logger (NoLoggingT, runNoLoggingT)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Control.Monad.Persist (Entity(..), SqlPersistT, insert, runSqlPersistT, selectList)
 import Control.Monad.Trans.Control (MonadBaseControl)
 import Data.Text (Text)
 import Database.Persist.Sqlite (withSqliteConn)
-import Database.Persist.TH
+import Database.Persist.TH (mkPersist, persistLowerCase, sqlSettings)
+import Test.Hspec hiding (shouldBe)
+
+import Genesis.Persist (runMigrations)
 
 mkPersist sqlSettings [persistLowerCase|
 Blog

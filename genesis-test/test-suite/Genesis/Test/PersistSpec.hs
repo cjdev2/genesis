@@ -13,8 +13,7 @@ module Genesis.Test.PersistSpec (spec) where
 import Control.Monad.Persist (Entity(..), insert, selectList)
 import Data.Text (Text)
 import Database.Persist.TH (mkPersist, persistLowerCase, sqlSettings)
-import Genesis.Test.Hspec
-import Genesis.Test.Persist (dbExample)
+import Genesis.Test
 
 mkPersist sqlSettings [persistLowerCase|
 Blog
