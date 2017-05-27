@@ -1,0 +1,12 @@
+resolver: nightly-2017-05-17
+
+packages:
+- '.'
+- location: '../genesis'
+  extra-dep: true
+
+extra-deps: []
+
+flags: {}
+
+extra-deps: [monad-persist-0.0.1.0]

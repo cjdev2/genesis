@@ -1,0 +1,63 @@
+name: genesis-sample
+version: 0.0.1.0
+category: Other
+synopsis: Opinionated bootstrapping for Haskell web services.
+description: Opinionated bootstrapping for Haskell web services.
+maintainer: Alexis King <lexi.lambda@gmail.com>
+copyright: 2017 CJ Affiliate by Conversant
+license: ISC
+github: cjdev/genesis
+
+extra-source-files:
+- package.yaml
+- stack.yaml
+
+ghc-options: -Wall
+default-extensions:
+- ConstraintKinds
+- DeriveGeneric
+- DuplicateRecordFields
+- FlexibleContexts
+- FlexibleInstances
+- GADTs
+- GeneralizedNewtypeDeriving
+- KindSignatures
+- LambdaCase
+- MultiParamTypeClasses
+- NamedFieldPuns
+- OverloadedStrings
+- RankNTypes
+- ScopedTypeVariables
+- TypeApplications
+- TypeOperators
+
+library:
+  dependencies:
+  - base 
+  - envparse
+  - genesis
+  - monad-logger
+  - monad-persist
+  - mtl
+  - persistent
+  - persistent-postgresql
+  - persistent-template
+  - resource-pool
+  - servant
+  - servant-server
+  - template-haskell
+  - text
+  - wai
+  - warp
+  source-dirs: library
+executables:
+  genesis-sample:
+    dependencies:
+      - base
+      - genesis-sample
+    ghc-options:
+      - -rtsopts
+      - -threaded
+      - -with-rtsopts=-N
+    main: Main.hs
+    source-dirs: executable
