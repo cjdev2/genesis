@@ -12,7 +12,7 @@ services: [postgresql]
 # cache file per set of arguments.
 matrix:
   include:
-  - env: ARGS="--resolver lts-7"
+  - env: ARGS="--resolver lts-8"
     compiler: ": #stack 8.0.1"
     addons: { apt: { packages: [libgmp-dev] } }
 
