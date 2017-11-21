@@ -12,9 +12,13 @@ services: [postgresql]
 # cache file per set of arguments.
 matrix:
   include:
-  - env: ARGS=""
+  - env: ARGS="--resolver lts-7"
+    compiler: ": #stack 8.0.1"
+    addons: { apt: { packages: [libgmp-dev] } }
+
+  - env: ARGS="--resolver lts-9"
     compiler: ": #stack 8.0.2"
-    addons: { apt: { packages: [ghc-8.0.2], sources: [hvr-ghc] } }
+    addons: { apt: { packages: [libgmp-dev] } }
 
   - env: ARGS="--resolver nightly"
     compiler: ": #stack nightly"
