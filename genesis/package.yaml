@@ -1,5 +1,5 @@
 name: genesis
-version: 0.0.1.0
+version: 0.1.0.0
 category: Other
 synopsis: Opinionated bootstrapping for Haskell web services.
 description: Opinionated bootstrapping for Haskell web services.
