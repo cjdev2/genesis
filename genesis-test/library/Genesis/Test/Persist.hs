@@ -43,12 +43,12 @@ import qualified Control.Monad.Persist as Persist
 import qualified Database.Persist.Postgresql as PG
 import qualified Genesis.Test.Hspec as Hspec
 
-import Control.Exception (bracket_)
+import Control.Exception.Lifted (bracket_, finally, onException)
 import Control.Monad.Base (liftBase)
-import Control.Monad.IO.Class (MonadIO)
 import Control.Monad.Logger (runNoLoggingT)
-import Control.Monad.Trans.Control (MonadBaseControl, liftBaseOp_)
-import Data.IORef (IORef, newIORef, readIORef, writeIORef)
+import Control.Monad.Trans.Class (lift)
+import Control.Monad.Trans.Control (MonadBaseControl)
+import Data.IORef.Lifted (IORef, newIORef, readIORef, writeIORef)
 import Data.Maybe (fromMaybe)
 import Genesis.Persist (PostgresOptions, withPostgresqlConn)
 import GHC.Stack (HasCallStack)
@@ -63,7 +63,7 @@ dbConnRef = unsafePerformIO (newIORef Nothing)
   does not exist (that is, you are not in the dynamic extent of a call to
   'withGlobalPostgresqlConn'), this will raise an exception.
 -}
-dbConn :: HasCallStack => MonadBaseControl IO m => m Persist.SqlBackend
+dbConn :: (HasCallStack, MonadBaseControl IO m) => m Persist.SqlBackend
 dbConn = fromMaybe (error "dbConn: connection does not exist") <$> liftBase (readIORef dbConnRef)
 
 {-|
@@ -76,17 +76,18 @@ dbConn = fromMaybe (error "dbConn: connection does not exist") <$> liftBase (rea
   concise, but this function is provided for uses that fall outside of simple
   @hspec@ examples.
 -}
-runDB :: (MonadIO m, MonadBaseControl IO m) => Persist.SqlPersistT m a -> m a
-runDB x = Persist.runPersistT (x <* Persist.transactionUndo) =<< dbConn
+runDB :: MonadBaseControl IO m => Persist.SqlPersistT m a -> m a
+runDB x = Persist.runPersistT (x `finally` Persist.transactionUndo) =<< dbConn
 
 {-|
   Like 'runDB', except that the transaction is commited after running instead of
-  rolled back. You should avoid this in test code to avoid creating tests that
-  dependent on the database state, but it can be useful to run migrations, for
-  example.
+  rolled back (unless an exception is raised, in which case the transaction is
+  rolled back, anyway). You should avoid this in test code to avoid creating
+  tests that dependent on the database state, but it can be useful to run
+  migrations, for example.
 -}
-runDBCommit :: (MonadIO m, MonadBaseControl IO m) => Persist.SqlPersistT m a -> m a
-runDBCommit x = Persist.runPersistT (x <* Persist.transactionSave) =<< dbConn
+runDBCommit :: MonadBaseControl IO m => Persist.SqlPersistT m a -> m a
+runDBCommit x = Persist.runPersistT ((x <* Persist.transactionSave) `onException` Persist.transactionUndo) =<< dbConn
 
 {-|
   A helper function that combines 'Hspec.example' with 'runDB'. This can be used
@@ -110,9 +111,9 @@ dbExample = Hspec.example . runDB
   extent of its execution. The connection is started within a transaction.
 -}
 withGlobalPostgresqlConn :: MonadBaseControl IO m => PostgresOptions -> m a -> m a
-withGlobalPostgresqlConn opts = liftBaseOp_ $ \action ->
+withGlobalPostgresqlConn opts action =
   runNoLoggingT $ withPostgresqlConn opts $ \conn -> do
     oldConn <- liftBase $ readIORef dbConnRef
-    liftBase $ bracket_ (writeIORef dbConnRef (Just conn)) (writeIORef dbConnRef oldConn) $ do
-      PG.connBegin conn (PG.getStmtConn conn) -- start a new transaction
-      action
+    bracket_ (writeIORef dbConnRef (Just conn)) (writeIORef dbConnRef oldConn) $ do
+      liftBase $ PG.connBegin conn (PG.getStmtConn conn) -- start a new transaction
+      lift action

@@ -34,15 +34,16 @@ default-extensions:
 
 library:
   dependencies:
-  - base                   >= 4.9.0.0 && < 5
+  - base                   >= 4.9 && < 5
   - genesis                == 0.0.1.0
   - hspec
-  - hspec-expectations     >= 0.7.0
+  - hspec-expectations     >= 0.7
   - lifted-base
-  - monad-control          >= 1.0.0.0 && < 2
+  - monad-control          >= 1 && < 2
   - monad-logger           >= 0.3.10
-  - monad-persist          >= 0.0.1.0 && < 1
+  - monad-persist          >= 0.0.1.2 && < 1
   - persistent-postgresql  >= 2.5 && < 3
+  - transformers
   - transformers-base
   source-dirs: library
 
