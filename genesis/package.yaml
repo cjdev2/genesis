@@ -47,7 +47,7 @@ library:
   - persistent-postgresql  >= 2.5 && < 3
   - persistent-template    >= 2.5 && < 3
   - resource-pool
-  - template-haskell       >= 2.11 && < 2.12
+  - template-haskell       >= 2.11 && < 2.13
   - text
   - text-conversions       >= 0.2 && < 1
   - transformers
