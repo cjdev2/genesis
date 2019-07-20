@@ -2,10 +2,11 @@ resolver: lts-8.11
 
 packages:
 - '.'
-- location: '../genesis'
-  extra-dep: true
 
-extra-deps: [monad-io-adapter-0.1.0.0, monad-persist-0.0.2.0]
+extra-deps:
+- monad-io-adapter-0.1.0.0
+- monad-persist-0.0.2.0
+- ../genesis
 
 flags: {}
 
