@@ -17,8 +17,7 @@ import qualified Env
 
 import Control.Monad ((<=<))
 import Control.Monad.Logger (MonadLogger)
-import Control.Monad.Trans.Control (MonadBaseControl)
-import Control.Monad.IO.Adapter (MonadIOAdapterT(..), adaptMonadIO)
+import Control.Monad.IO.Unlift (MonadUnliftIO)
 import Control.Monad.Persist (SqlBackend)
 import Data.Monoid ((<>))
 import Data.Pool (Pool)
@@ -57,19 +56,19 @@ postgresOptions = PostgresOptions
   Like 'PG.withPostgresqlPool' from "Database.Persist.Postgresql", except using
   'PostgresOptions'.
 -}
-withPostgresqlPool :: (MonadBaseControl IO m, MonadLogger m)
+withPostgresqlPool :: (MonadUnliftIO m, MonadLogger m)
                    => PostgresOptions -- ^ Options to connect to the database.
                    -> Int -- ^ Number of connections to be kept open in the pool.
                    -> (Pool SqlBackend -> m a) -- ^ Action to be executed that uses the connection pool.
                    -> m a
-withPostgresqlPool opts n f = adaptMonadIO (PG.withPostgresqlPool (pgConnString opts) n (MonadIOAdapterT . f))
+withPostgresqlPool opts n f = PG.withPostgresqlPool (pgConnString opts) n f
 
 {-|
   Like 'PG.withPostgresqlConn' from "Database.Persist.Postgresql", except using
   'PostgresOptions'.
 -}
-withPostgresqlConn :: (MonadBaseControl IO m, MonadLogger m) => PostgresOptions -> (SqlBackend -> m a) -> m a
-withPostgresqlConn opts f = adaptMonadIO (PG.withPostgresqlConn (pgConnString opts) (MonadIOAdapterT . f))
+withPostgresqlConn :: (MonadUnliftIO m, MonadLogger m) => PostgresOptions -> (SqlBackend -> m a) -> m a
+withPostgresqlConn opts f = PG.withPostgresqlConn (pgConnString opts) f
 
 pgConnString :: PostgresOptions -> PG.ConnectionString
 pgConnString PostgresOptions { host, port, user, dbName, password } =

@@ -14,6 +14,7 @@ import qualified Test.Hspec as Hspec
 
 import Control.Monad.Logger (NoLoggingT, runNoLoggingT)
 import Control.Monad.IO.Class (MonadIO, liftIO)
+import Control.Monad.IO.Unlift (MonadUnliftIO)
 import Control.Monad.Persist (Entity(..), SqlPersistT, insert, runSqlPersistT, selectList)
 import Control.Monad.Trans.Control (MonadBaseControl)
 import Data.Text (Text)
@@ -35,7 +36,7 @@ Post
   deriving Eq Show
 |]
 
-runSqlite :: (MonadIO m, MonadBaseControl IO m) => SqlPersistT (NoLoggingT m) a -> m a
+runSqlite :: (MonadBaseControl IO m, MonadUnliftIO m) => SqlPersistT (NoLoggingT m) a -> m a
 runSqlite x = runNoLoggingT $ withSqliteConn ":memory:" (runSqlPersistT ($(runMigrations "test-suite/migrations") >> x))
 
 shouldBe :: (Eq a, Show a, MonadIO m) => a -> a -> m ()

@@ -45,6 +45,8 @@ import qualified Genesis.Test.Hspec as Hspec
 
 import Control.Exception.Lifted (bracket_, finally, onException)
 import Control.Monad.Base (liftBase)
+import UnliftIO (MonadUnliftIO)
+import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Logger (runNoLoggingT)
 import Control.Monad.Trans.Class (lift)
 import Control.Monad.Trans.Control (MonadBaseControl)
@@ -53,6 +55,7 @@ import Data.Maybe (fromMaybe)
 import Genesis.Persist (PostgresOptions, withPostgresqlConn)
 import GHC.Stack (HasCallStack)
 import System.IO.Unsafe (unsafePerformIO)
+-- import UnliftIO.Exception (bracket_, finally, onException)
 
 dbConnRef :: IORef (Maybe Persist.SqlBackend)
 dbConnRef = unsafePerformIO (newIORef Nothing)
@@ -110,7 +113,7 @@ dbExample = Hspec.example . runDB
   Parameterizes the global database connection, 'dbConn', within the dynamic
   extent of its execution. The connection is started within a transaction.
 -}
-withGlobalPostgresqlConn :: MonadBaseControl IO m => PostgresOptions -> m a -> m a
+withGlobalPostgresqlConn :: (MonadBaseControl IO m, MonadUnliftIO m)=> PostgresOptions -> m a -> m a
 withGlobalPostgresqlConn opts action =
   runNoLoggingT $ withPostgresqlConn opts $ \conn -> do
     oldConn <- liftBase $ readIORef dbConnRef

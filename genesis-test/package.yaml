@@ -4,7 +4,7 @@ category: Other
 synopsis: Opinionated bootstrapping for Haskell web services.
 description: Opinionated bootstrapping for Haskell web services.
 maintainer: Alexis King <lexi.lambda@gmail.com>
-copyright: 2017 CJ Affiliate by Conversant
+copyright: 2017 CJ Affiliate
 license: ISC
 github: cjdev/genesis
 
@@ -45,6 +45,7 @@ library:
   - persistent-postgresql  >= 2.5 && < 3
   - transformers
   - transformers-base
+  - unliftio
   source-dirs: library
 
 tests:
