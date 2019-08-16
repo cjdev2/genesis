@@ -1,4 +1,4 @@
-resolver: lts-11.22
+resolver: lts-12.26
 
 packages:
 - '.'
@@ -6,5 +6,6 @@ packages:
 flags: {}
 
 extra-deps:
-  - monad-persist-0.0.3.0
-  - '../genesis'
+- envparse-0.4.1
+- monad-persist-0.0.3.0
+- '../genesis'

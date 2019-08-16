@@ -1,9 +1,10 @@
-resolver: lts-11.22
+resolver: lts-12.26
 
 packages:
 - '.'
 
 extra-deps:
+- envparse-0.4.1
 - monad-io-adapter-0.1.0.0
 - monad-persist-0.0.3.0
 - '../genesis'
