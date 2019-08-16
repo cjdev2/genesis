@@ -44,7 +44,7 @@ api :: ServerT Api AppHandler
 api = getMessage :<|> postMessage
 
 server :: Pool SqlBackend -> Server Api
-server pool = enter (NT appToHandler) api
+server pool = hoistServerWithContext (Proxy :: Proxy Api) (Proxy :: Proxy '[]) appToHandler api
   where
     appToHandler :: forall a. AppHandler a -> Handler a
     appToHandler (AppHandler m) = Handler . withResource pool $ runPersistT (runReaderT m ())
